@@ -25,7 +25,7 @@ size_t hash(char *val, int capacity) {
 // - key: a pointer to the key value
 // returns: the index of the deletion
 // -1 if not found
-int kv_delete(kv_t *db, const char *key) {
+int kv_delete(kv_t *db, char *key) {
 	if (!db || !key) return -1;
 
 	size_t idx = hash(key, db->capacity);
@@ -59,7 +59,7 @@ int kv_delete(kv_t *db, const char *key) {
 // - key: a pointer to the key value
 // returns: the pointer to the key
 // NULL if not found
-char *kv_get(kv_t *db, const char *key) {
+char *kv_get(kv_t *db, char *key) {
 	if (!db || !key) return NULL;
 
 	size_t idx = hash(key, db->capacity);
@@ -89,7 +89,7 @@ char *kv_get(kv_t *db, const char *key) {
 // - key: a pointer to the key value
 // - value: a pointer to the value itself
 // returns: the index of the key, otherwise on error, returns -1, on not found return -2
-int kv_put(kv_t *db, const char *key, const char *value) {
+int kv_put(kv_t *db, char *key, char *value) {
 	if (!db || !key || !value) return -1;
 
 	size_t idx = hash(key, db->capacity);
@@ -136,8 +136,8 @@ int kv_put(kv_t *db, const char *key, const char *value) {
 // params:
 // - db: a pointer to the db
 // returns: 0 on success, -1 on failure
-int kv_free(kv_t *db) {
-	if (!db) return -1;
+void kv_free(kv_t *db) {
+	if (!db) return;
 
 	for (int i = 0; i < db->capacity -1; i++) {
 		kv_entry_t *e = &db->entries[i];
@@ -152,8 +152,6 @@ int kv_free(kv_t *db) {
 
 	free(db->entries);
 	free(db);
-
-	return 0;
 }
 
 kv_t *kv_init(size_t capacity) {
